@@ -3,6 +3,8 @@ Kraken.io API Implementation in C#
 
 To use, create a new instance of `KrakenClient` and pass in an instance of `HttpClient` and your API access and secret keys. The original API documentation can be found [here][0]. For more information, please visit [arex388.com][1].
 
+Available as a NuGet package [here][2].
+
     var kraken = new KrakenClient(httpClient, "{accessKey}", "{secretKey}");
 
 **Optimize**
@@ -19,3 +21,4 @@ To use, create a new instance of `KrakenClient` and pass in an instance of `Http
 
 [0]:https://kraken.io/docs/getting-started
 [1]:https://arex388.com
+[2]:https://www.nuget.org/packages/Arex388.Kraken
