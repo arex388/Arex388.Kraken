@@ -1,11 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ApplicationIcon />
     <StartupObject />
+    <Authors>Arex388</Authors>
+    <Description>Kraken.io API Implementation in C#</Description>
+    <PackageProjectUrl>https://github.com/arex388/Arex388.Kraken</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/arex388/Arex388.Kraken</RepositoryUrl>
+    <PackageTags>kraken kraken.io</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
