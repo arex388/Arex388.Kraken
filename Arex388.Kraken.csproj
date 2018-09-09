@@ -11,6 +11,9 @@
     <PackageProjectUrl>https://github.com/arex388/Arex388.Kraken</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arex388/Arex388.Kraken</RepositoryUrl>
     <PackageTags>kraken kraken.io arex388</PackageTags>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

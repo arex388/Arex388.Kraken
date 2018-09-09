@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 
@@ -10,13 +9,6 @@ namespace Arex388.Kraken {
 
 		[JsonProperty("auth")]
 		public Authorization Authorization { get; set; }
-		[JsonProperty("auto_orient")]
-		public bool AutoOrient { get; set; }
-		[JsonProperty("callback_url")]
-		public string CallbackUrl { get; set; }
-		[JsonProperty("sampling_scheme")]
-		public string ChromaSampling { get; set; } = ChromaSamplingType.FourFourFour;
-		public Convert Convert { get; set; }
 		public bool Dev { get; set; }
 		[JsonIgnore]
 		public string Endpoint {
@@ -50,15 +42,8 @@ namespace Arex388.Kraken {
 		}
 		[JsonIgnore]
 		public string FilePath { get; set; }
-		public bool Lossy { get; set; }
-		[JsonProperty("preserve_meta")]
-		public IEnumerable<string> MetadataToPreserve { get; set; }
 		[JsonIgnore]
 		public virtual HttpMethod Method { get; } = HttpMethod.Post;
-		public int? Quality { get; set; }
-		public object Resize { get; set; }
 		public string Url { get; set; }
-		public virtual bool Wait { get; }
-		public bool WebP { get; set; }
 	}
 }
