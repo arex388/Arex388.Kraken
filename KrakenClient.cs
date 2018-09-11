@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -18,9 +19,9 @@ namespace Arex388.Kraken {
 			HttpClient client,
 			string accessKey,
 			string secretKey) {
-			Client = client;
-			AccessKey = accessKey;
-			SecretKey = secretKey;
+			Client = client ?? throw new ArgumentNullException(nameof(client));
+			AccessKey = accessKey ?? throw new ArgumentNullException(nameof(accessKey));
+			SecretKey = secretKey ?? throw new ArgumentNullException(nameof(secretKey));
 		}
 
 		public async Task<byte[]> DownloadAsync(
@@ -137,7 +138,7 @@ namespace Arex388.Kraken {
 
 			return JsonConvert.DeserializeObject<OptimizeWaitResponse>(response);
 		}
-		
+
 		private async Task<string> GetResponseAsync(
 			RequestBase request) {
 			request.Authorization = new Authorization {
