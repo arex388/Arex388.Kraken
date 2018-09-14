@@ -148,7 +148,9 @@ namespace Arex388.Kraken {
 
 			try {
 				if (request.Method == HttpMethod.Get) {
-					return await Client.GetStringAsync(request.Endpoint);
+					var response = await Client.GetAsync(request.Endpoint);
+
+					return await response.Content.ReadAsStringAsync();
 				}
 
 				var body = JsonConvert.SerializeObject(request, JsonSerializerSettings);
