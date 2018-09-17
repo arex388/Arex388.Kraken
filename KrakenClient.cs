@@ -26,7 +26,7 @@ namespace Arex388.Kraken {
 
 		public async Task<byte[]> DownloadAsync(
 			string url) {
-			if (string.IsNullOrEmpty(url)) {
+			if (url is null) {
 				return null;
 			}
 
@@ -79,7 +79,7 @@ namespace Arex388.Kraken {
 
 		public async Task<OptimizeResponse> GetOptimizeAsync(
 			OptimizeRequest request) {
-			if (request == null) {
+			if (request is null) {
 				return null;
 			}
 
@@ -130,7 +130,7 @@ namespace Arex388.Kraken {
 
 		public async Task<OptimizeWaitResponse> GetOptimizeWaitAsync(
 			OptimizeWaitRequest request) {
-			if (request == null) {
+			if (request is null) {
 				return null;
 			}
 
