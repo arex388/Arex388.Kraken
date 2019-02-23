@@ -5,19 +5,29 @@ To use, create a new instance of `KrakenClient` and pass in an instance of `Http
 
 Available as a NuGet package [here][2].
 
-    var kraken = new KrakenClient(httpClient, "{accessKey}", "{secretKey}");
+    var kraken = new KrakenClient(
+        httpClient,
+        "{accessKey}",
+        "{secretKey}"
+    );
 
 **Optimize**
 
-    var optimize = await kraken.GetOptimizeAsync("{filePath}");
+    var optimize = await kraken.GetOptimizeAsync(
+        "{filePath}"
+    );
 
 **Optimize Wait**
 
-    var optimizeWait = await kraken.GetOptimizeWaitAsync("{filePath}");
+    var optimizeWait = await kraken.GetOptimizeWaitAsync(
+        "{filePath}"
+    );
 
 **Download**
 
-    var download = await kraken.DownloadAsync("{krakedUrl}");
+    var download = await kraken.DownloadAsync(
+        "{krakedUrl}"
+    );
 
 [0]:https://kraken.io/docs/getting-started
 [1]:https://arex388.com
