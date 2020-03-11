@@ -7,13 +7,13 @@
     <ApplicationIcon />
     <StartupObject />
     <Authors>Arex388</Authors>
-    <Description>Kraken.io API Implementation in C#</Description>
+    <Description>A C# client for the Kraken.io API.</Description>
     <PackageProjectUrl>https://github.com/arex388/Arex388.Kraken</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arex388/Arex388.Kraken</RepositoryUrl>
     <PackageTags>kraken kraken.io arex388</PackageTags>
     <AssemblyVersion>1.0.5.0</AssemblyVersion>
     <FileVersion>1.0.5.0</FileVersion>
-    <Version>1.0.5</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

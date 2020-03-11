@@ -1,173 +1,310 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Arex388.Kraken {
-	public sealed class KrakenClient {
-		private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings {
-			ContractResolver = new CamelCasePropertyNamesContractResolver(),
-			NullValueHandling = NullValueHandling.Ignore
-		};
+    public sealed class KrakenClient {
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore
+        };
 
-		private HttpClient Client { get; }
-		private string AccessKey { get; }
-		private string SecretKey { get; }
+        /// <summary>
+        /// The maximum number of resizes allowed for an optimization.
+        /// </summary>
+        private const byte MaxResizeCount = 10;
 
-		public KrakenClient(
-			HttpClient client,
-			string accessKey,
-			string secretKey) {
-			Client = client ?? throw new ArgumentNullException(nameof(client));
-			AccessKey = accessKey ?? throw new ArgumentNullException(nameof(accessKey));
-			SecretKey = secretKey ?? throw new ArgumentNullException(nameof(secretKey));
-		}
+        /// <summary>
+        /// An instance of Authorization containing the access and secret keys for the Kraken.io API.
+        /// </summary>
+        private Authorization Authorization { get; }
 
-		public async Task<byte[]> DownloadAsync(
-			string url) {
-			if (url is null) {
-				return null;
-			}
+        /// <summary>
+        /// An instance of HttpClient.
+        /// </summary>
+        private HttpClient HttpClient { get; }
 
-			try {
-				return await Client.GetByteArrayAsync(url);
-			} catch (HttpRequestException) {
-				return null;
-			}
-		}
+        /// <summary>
+        /// Is debugging enabled.
+        /// </summary>
+        private bool Debug { get; }
 
-		public async Task<OptimizeResponse> GetOptimizeAsync(
-			string filePath,
-			int? width = null,
-			int? height = null) {
-			var request = new OptimizeRequest {
-				FilePath = filePath
-			};
+        /// <summary>
+        /// Kraken.io API client.
+        /// </summary>
+        /// <param name="httpClient">An instance of HttpClient.</param>
+        /// <param name="accessKey">Your Kraken.io API access key.</param>
+        /// <param name="secretKey">Your Kraken.io API secret key.</param>
+        /// <param name="debug">Toggle capturing the raw JSON response from Kraken.io and returning it as part of the deserialized response object.</param>
+        public KrakenClient(
+            HttpClient httpClient,
+            string accessKey,
+            string secretKey,
+            bool debug = false) {
+            if (!accessKey.HasValue()) {
+                throw new ArgumentNullException(nameof(accessKey));
+            }
 
-			if (width.HasValue
-				&& height.HasValue) {
-				request.Resize = new Resize {
-					Height = height.Value,
-					Width = width.Value
-				};
-			}
+            if (!secretKey.HasValue()) {
+                throw new ArgumentNullException(nameof(secretKey));
+            }
 
-			return await GetOptimizeAsync(request);
-		}
+            Authorization = new Authorization {
+                Access = accessKey,
+                Secret = secretKey
+            };
+            HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            Debug = debug;
+        }
 
-		public async Task<OptimizeResponse> GetOptimizeAsync(
-			byte[] fileBlob,
-			string fileName,
-			int? width = null,
-			int? height = null) {
-			var request = new OptimizeRequest {
-				FileBlob = fileBlob,
-				FileName = fileName
-			};
+        /// <summary>
+        /// Download the kraked image.
+        /// </summary>
+        /// <param name="url">The kraked image's URL.</param>
+        /// <returns>A byte array.</returns>
+        public async Task<byte[]> DownloadAsync(
+            string url) {
+            if (url is null) {
+                return null;
+            }
 
-			if (width.HasValue
-				&& height.HasValue) {
-				request.Resize = new Resize {
-					Height = height.Value,
-					Width = width.Value
-				};
-			}
+            try {
+                return await HttpClient.GetByteArrayAsync(url);
+            } catch (HttpRequestException) {
+                return null;
+            }
+        }
 
-			return await GetOptimizeAsync(request);
-		}
+        /// <summary>
+        /// Optimize a source image using a file path using the default optimization settings.
+        /// </summary>
+        /// <param name="filePath">The source image's file path.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public Task<OptimizeResponse> OptimizeAsync(
+            string filePath) {
+            var fileBlob = File.ReadAllBytes(filePath);
+            var fileName = Path.GetFileName(filePath);
 
-		public async Task<OptimizeResponse> GetOptimizeAsync(
-			OptimizeRequest request) {
-			if (request is null) {
-				return null;
-			}
+            return OptimizeAsync(fileBlob, fileName);
+        }
 
-			var response = await GetResponseAsync(request);
+        /// <summary>
+        /// Optimize a source image using a byte array using the default optimization settings.
+        /// </summary>
+        /// <param name="fileBlob">The source image's byte array.</param>
+        /// <param name="fileName">The source image's file name.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public Task<OptimizeResponse> OptimizeAsync(
+            byte[] fileBlob,
+            string fileName) => OptimizeAsync(new OptimizeRequest {
+                FileBlob = fileBlob,
+                FileName = fileName
+            });
 
-			return JsonConvert.DeserializeObject<OptimizeResponse>(response);
-		}
+        /// <summary>
+        /// Optimize a source image using a custom request.
+        /// </summary>
+        /// <param name="request">An OptimizeRequest instance.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public async Task<OptimizeResponse> OptimizeAsync(
+            OptimizeRequest request) {
+            //  Check if the request is null and return an invalid response if it is.
 
-		public async Task<OptimizeWaitResponse> GetOptimizeWaitAsync(
-			string filePath,
-			int? width = null,
-			int? height = null) {
-			var request = new OptimizeWaitRequest {
-				FilePath = filePath
-			};
+            if (request is null) {
+                return InvalidRequestResponse;
+            }
 
-			if (width.HasValue
-				&& height.HasValue) {
-				request.Resize = new Resize {
-					Height = height.Value,
-					Width = width.Value
-				};
-			}
+            if (request.Resize.HasItems()) {
+                //  Check if the resize count is more than the max allowed.
 
-			return await GetOptimizeWaitAsync(request);
-		}
+                if (request.Resize.Count() > MaxResizeCount) {
+                    return InvalidResizeCountResponse;
+                }
 
-		public async Task<OptimizeWaitResponse> GetOptimizeWaitAsync(
-			byte[] fileBlob,
-			string fileName,
-			int? width = null,
-			int? height = null) {
-			var request = new OptimizeWaitRequest {
-				FileBlob = fileBlob,
-				FileName = fileName
-			};
+                //  Validate if the resize dimensions are correct.
 
-			if (width.HasValue
-				&& height.HasValue) {
-				request.Resize = new Resize {
-					Height = height.Value,
-					Width = width.Value
-				};
-			}
+                var validResizeDimensions = ValidateResizeDimensions(request.Resize);
 
-			return await GetOptimizeWaitAsync(request);
-		}
+                if (!validResizeDimensions) {
+                    return InvalidResizeDimensionsResponse;
+                }
+            }
 
-		public async Task<OptimizeWaitResponse> GetOptimizeWaitAsync(
-			OptimizeWaitRequest request) {
-			if (request is null) {
-				return null;
-			}
+            //  Get the request's response and deserialize it into an OptimizeResponse instance.
 
-			var response = await GetResponseAsync(request);
+            var response = await GetResponseAsync(request);
+            var optimizeResponse = JsonConvert.DeserializeObject<OptimizeResponse>(response);
 
-			return JsonConvert.DeserializeObject<OptimizeWaitResponse>(response);
-		}
+            if (Debug) {
+                optimizeResponse.Json = response;
+            }
 
-		private async Task<string> GetResponseAsync(
-			RequestBase request) {
-			request.Authorization = new Authorization {
-				Access = AccessKey,
-				Secret = SecretKey
-			};
+            return optimizeResponse;
+        }
 
-			try {
-				if (request.Method == HttpMethod.Get) {
-					var response = await Client.GetAsync(request.Endpoint);
+        /// <summary>
+        /// Optimize a source image using a file path and wait for the optimization to complete using the default optimization settings.
+        /// </summary>
+        /// <param name="filePath">The source image's file path.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public Task<OptimizeResponse> OptimizeWaitAsync(
+            string filePath) {
+            var fileBlob = File.ReadAllBytes(filePath);
+            var fileName = Path.GetFileName(filePath);
 
-					return await response.Content.ReadAsStringAsync();
-				}
+            return OptimizeWaitAsync(fileBlob, fileName);
+        }
 
-				var body = JsonConvert.SerializeObject(request, JsonSerializerSettings);
+        /// <summary>
+        /// Optimize a source image using a byte array and wait for the optimization to complete using the default optimization settings.
+        /// </summary>
+        /// <param name="fileBlob">The source image's byte array.</param>
+        /// <param name="fileName">The source image's file name.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public Task<OptimizeResponse> OptimizeWaitAsync(
+            byte[] fileBlob,
+            string fileName) => OptimizeWaitAsync(new OptimizeRequest {
+                FileBlob = fileBlob,
+                FileName = fileName
+            });
 
-				using (var content = new MultipartFormDataContent())
-				using (var stringContent = new StringContent(body))
-				using (var byteContent = new ByteArrayContent(request.FileBlob)) {
-					content.Add(stringContent, "json");
-					content.Add(byteContent, "file", request.FileName);
+        /// <summary>
+        /// Optimize a source image using a custom request and wait for the optimization to complete.
+        /// </summary>
+        /// <param name="request">An OptimizeRequest instance.</param>
+        /// <returns>An OptimizeResponse.</returns>
+        public async Task<OptimizeResponse> OptimizeWaitAsync(
+            OptimizeRequest request) {
+            //  Check if the request is null and return an invalid response if it is.
 
-					using (var message = await Client.PostAsync(request.Endpoint, content)) {
-						return await message.Content.ReadAsStringAsync();
-					}
-				}
-			} catch (HttpRequestException) {
-				return null;
-			}
-		}
-	}
+            if (request is null) {
+                return InvalidRequestResponse;
+            }
+
+            if (request.Resize.HasItems()) {
+                //  Check if the resize count is more than the max allowed.
+
+                if (request.Resize.Count() > MaxResizeCount) {
+                    return InvalidResizeCountResponse;
+                }
+
+                //  Validate if the resize dimensions are correct.
+
+                var validResizeDimensions = ValidateResizeDimensions(request.Resize);
+
+                if (!validResizeDimensions) {
+                    return InvalidResizeDimensionsResponse;
+                }
+            }
+
+            //  Make sure to update the request to be synchronous.
+
+            request.Wait = true;
+
+            //  Get the request's response and deserialize it into an OptimizeResponse instance.
+
+            var response = await GetResponseAsync(request);
+            var optimizeWaitResponse = JsonConvert.DeserializeObject<OptimizeResponse>(response);
+
+            if (Debug) {
+                optimizeWaitResponse.Json = response;
+            }
+
+            return optimizeWaitResponse;
+        }
+
+        /// <summary>
+        /// Get the account's status and usage for the current billing period.
+        /// </summary>
+        /// <returns>A StatusResponse.</returns>
+        public async Task<StatusResponse> StatusAsync() {
+            var response = await GetResponseAsync(new StatusRequest());
+            var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(response);
+
+            if (Debug) {
+                statusResponse.Json = response;
+            }
+
+            return statusResponse;
+        }
+
+        //  ========================================================================
+        //  
+        //  ========================================================================
+
+        private static ByteArrayContent GetByteContent(
+            OptimizeRequest request) => request is null ? null : new ByteArrayContent(request.FileBlob);
+
+        private async Task<string> GetResponseAsync(
+            RequestBase request) {
+            request.Authorization = Authorization;
+
+            try {
+                return await GetPostResponseAsync(request);
+            } catch (HttpRequestException e) {
+                var message = $"{e.Message}\n{e.InnerException?.Message}".Trim();
+
+                return $"{{\"message\":\"{message}\",\"success\":false}}";
+            }
+        }
+
+        private async Task<string> GetPostResponseAsync(
+            RequestBase request) {
+            var optimizeRequest = request as OptimizeRequest;
+
+            var body = JsonConvert.SerializeObject(request, JsonSerializerSettings);
+
+            using var content = new MultipartFormDataContent();
+            using var stringContent = new StringContent(body);
+            using var byteContent = GetByteContent(optimizeRequest);
+
+            content.Add(stringContent, "json");
+
+            if (optimizeRequest != null
+                && byteContent != null) {
+                content.Add(byteContent, "file", optimizeRequest.FileName);
+            }
+
+            using var message = await HttpClient.PostAsync(request.Endpoint, content);
+
+            var messageContent = await message.Content.ReadAsStringAsync();
+
+            return messageContent;
+        }
+
+        //  ========================================================================
+        //  Utilities
+        //  ========================================================================
+
+        /// <summary>
+        /// A failure due to over max number of allowed resize per optimization.
+        /// </summary>
+        private static readonly OptimizeResponse InvalidResizeCountResponse = ResponseBase.Invalid<OptimizeResponse>($"You can only have {MaxResizeCount} resizes per optimization.");
+
+        /// <summary>
+        /// A failure due to invalid resizing dimensions.
+        /// </summary>
+        private static readonly OptimizeResponse InvalidResizeDimensionsResponse = ResponseBase.Invalid<OptimizeResponse>("One or more resizes have invalid dimensions.");
+
+        /// <summary>
+        /// A failure due to a null request.
+        /// </summary>
+        private static readonly OptimizeResponse InvalidRequestResponse = ResponseBase.Invalid<OptimizeResponse>("The request is invalid.");
+
+        /// <summary>
+        /// Validate if the resize dimensions are correct.
+        /// </summary>
+        /// <param name="resizes">A collection of resizes.</param>
+        /// <returns>A boolean.</returns>
+        private static bool ValidateResizeDimensions(
+            IEnumerable<Resize> resizes) => resizes.All(
+            r =>
+                r.Height > 0
+                && r.Width > 0);
+    }
 }
