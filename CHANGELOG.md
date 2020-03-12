@@ -1,3 +1,8 @@
+#### 2.0.1 (2020-03-11)
+
+- Changed `Authorization` to be internal.
+- Enabled XML documentation to be generated for intellisense.
+
 #### 2.0.0 (2020-03-11)
 
 - Renamed `ChromaSamplingType` to `ChromaSampling`.
