@@ -1,0 +1,541 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Arex388.Kraken</name>
+    </assembly>
+    <members>
+        <member name="F:Arex388.Kraken.ChromaSampling.FourTwoZero">
+            <summary>
+            Kraken.io's default for lossy JPEG compression. Suitable for most images - this sampling scheme will yield the smallest possible file size.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ChromaSampling.FourTwoTwo">
+            <summary>
+            The two colour (chroma) components are sampled at half the sample rate of brightness (luma), thereby halving the horizontal chroma resolution.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ChromaSampling.FourFourFour">
+            <summary>
+            Each of the three colour components have the same sample rate as the luma channel, thus there is no chroma subsampling taking place. Use this scheme to disable chroma subsampling for the highest quality result, at the expense of a slightly larger file size.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.Bottom">
+            <summary>
+            South / Bottom
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.BottomLeft">
+            <summary>
+            South West / Bottom Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.BottomRight">
+            <summary>
+            South East / Bottom Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.Center">
+            <summary>
+            Center - this is the default gravity or direction, and applied when the crop_mode parameter is left out, or an invalid value is passed.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.East">
+            <summary>
+            East / Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.Left">
+            <summary>
+            West / Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.North">
+            <summary>
+            North / Top
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.NorthEast">
+            <summary>
+            North East / Top Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.NorthWest">
+            <summary>
+            North West / Top Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.Right">
+            <summary>
+            East / Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.South">
+            <summary>
+            South / Bottom
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.SouthEast">
+            <summary>
+            South East / Bottom Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.SouthWest">
+            <summary>
+            South West / Bottom Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.Top">
+            <summary>
+            North / Top
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.TopLeft">
+            <summary>
+            North West / Top Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.TopRight">
+            <summary>
+            North East / Top Right
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.CropMode.West">
+            <summary>
+            West / Left
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.Metadata.Copyright">
+             <summary>
+             Will preserve copyright entries. The following tags will be preserved (if present):
+            
+             - Exif.Image.Copyright
+             - Iptc.Application2.Copyright
+             - Xmp.dc.creator
+             - Xmp.dc.rights
+             - Xmp.photoshop.Credit
+             </summary>
+        </member>
+        <member name="F:Arex388.Kraken.Metadata.Date">
+             <summary>
+             Will preserve image creation date. The following tags will be preserved (if present):
+            
+             - Exif.Photo.DateTimeDigitized
+             - Exif.Photo.DateTimeOriginal
+             - Xmp.photoshop.DateCreated
+             </summary>
+        </member>
+        <member name="F:Arex388.Kraken.Metadata.Geotag">
+            <summary>
+            Will preserve location-specific information. The following tags will be preserved (if present):
+            
+            - Exif.GPSInfo.GPSLatitude
+            - Exif.GPSInfo.GPSLatitudeRef
+            - Exif.GPSInfo.GPSLongitude
+            - Exif.GPSInfo.GPSLongitudeRef
+            - Exif.GPSInfo.GPSVersionID
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.Metadata.Orientation">
+            <summary>
+            Will preserve the orientation (rotation) mark. The following tag will be preserved (if present):
+            
+            - Exif.Image.Orientation
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.Metadata.Profile">
+            <summary>
+            Will preserve the ICC colour profile. ICC colour profile information adds unnecessary bloat to images. However, preserving it can be necessary in extremely rare cases where removing this information could lead to a change in brightness and/or saturation of the resulting file.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Auto">
+            <summary>
+            The best strategy (portrait or landscape) will be selected according to its aspect ratio.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Crop">
+            <summary>
+            This option will crop an image to the exact size you specify. The resulting cropped image can optionally be scaled by inclusion of a scale, which accepts a number representing the percentage by which the image should be scaled.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Exact">
+            <summary>
+            Resize to exact width and height. Aspect ratio will not be maintained.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Fill">
+            <summary>
+            This strategy allows you to resize the image to fit the specified bounds while preserving the aspect ratio. The optional background property allows you to specify a color which will be used to fill the unused portions of the previously specified bounds.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Fit">
+            <summary>
+            This option will crop and resize your images to fit the desired width and height.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Landscape">
+            <summary>
+            Exact width will be set, height will be adjusted according to aspect ratio.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Portrait">
+            <summary>
+            Exact height will be set, width will be adjusted according to aspect ratio.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.ResizeStrategy.Square">
+            <summary>
+            This strategy will crop the image by its shorter dimension to make it a square, then resize it to the specified size.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.KrakenClient.MaxResizeCount">
+            <summary>
+            The maximum number of resizes allowed for an optimization.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.KrakenClient.Authorization">
+            <summary>
+            An instance of Authorization containing the access and secret keys for the Kraken.io API.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.KrakenClient.HttpClient">
+            <summary>
+            An instance of HttpClient.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.KrakenClient.Debug">
+            <summary>
+            Is debugging enabled.
+            </summary>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.#ctor(System.Net.Http.HttpClient,System.String,System.String,System.Boolean)">
+            <summary>
+            Kraken.io API client.
+            </summary>
+            <param name="httpClient">An instance of HttpClient.</param>
+            <param name="accessKey">Your Kraken.io API access key.</param>
+            <param name="secretKey">Your Kraken.io API secret key.</param>
+            <param name="debug">Toggle capturing the raw JSON response from Kraken.io and returning it as part of the deserialized response object.</param>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.DownloadAsync(System.String)">
+            <summary>
+            Download the kraked image.
+            </summary>
+            <param name="url">The kraked image's URL.</param>
+            <returns>A byte array.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeAsync(System.String)">
+            <summary>
+            Optimize a source image using a file path using the default optimization settings.
+            </summary>
+            <param name="filePath">The source image's file path.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeAsync(System.Byte[],System.String)">
+            <summary>
+            Optimize a source image using a byte array using the default optimization settings.
+            </summary>
+            <param name="fileBlob">The source image's byte array.</param>
+            <param name="fileName">The source image's file name.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeAsync(Arex388.Kraken.OptimizeRequest)">
+            <summary>
+            Optimize a source image using a custom request.
+            </summary>
+            <param name="request">An OptimizeRequest instance.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeWaitAsync(System.String)">
+            <summary>
+            Optimize a source image using a file path and wait for the optimization to complete using the default optimization settings.
+            </summary>
+            <param name="filePath">The source image's file path.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeWaitAsync(System.Byte[],System.String)">
+            <summary>
+            Optimize a source image using a byte array and wait for the optimization to complete using the default optimization settings.
+            </summary>
+            <param name="fileBlob">The source image's byte array.</param>
+            <param name="fileName">The source image's file name.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.OptimizeWaitAsync(Arex388.Kraken.OptimizeRequest)">
+            <summary>
+            Optimize a source image using a custom request and wait for the optimization to complete.
+            </summary>
+            <param name="request">An OptimizeRequest instance.</param>
+            <returns>An OptimizeResponse.</returns>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.StatusAsync">
+            <summary>
+            Get the account's status and usage for the current billing period.
+            </summary>
+            <returns>A StatusResponse.</returns>
+        </member>
+        <member name="F:Arex388.Kraken.KrakenClient.InvalidResizeCountResponse">
+            <summary>
+            A failure due to over max number of allowed resize per optimization.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.KrakenClient.InvalidResizeDimensionsResponse">
+            <summary>
+            A failure due to invalid resizing dimensions.
+            </summary>
+        </member>
+        <member name="F:Arex388.Kraken.KrakenClient.InvalidRequestResponse">
+            <summary>
+            A failure due to a null request.
+            </summary>
+        </member>
+        <member name="M:Arex388.Kraken.KrakenClient.ValidateResizeDimensions(System.Collections.Generic.IEnumerable{Arex388.Kraken.Resize})">
+            <summary>
+            Validate if the resize dimensions are correct.
+            </summary>
+            <param name="resizes">A collection of resizes.</param>
+            <returns>A boolean.</returns>
+        </member>
+        <member name="P:Arex388.Kraken.Authorization.Access">
+            <summary>
+            Your Kraken.io API access key.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Authorization.Secret">
+            <summary>
+            Your Kraken.io API secret key.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Convert.BackgroundColor">
+            <summary>
+            Background image when converting from transparent file formats like PNG or GIF into fully opaque format like JPEG. The background property can be passed in HEX notation "#f60" or "#ff6600", RGB "rgb(255, 0, 0)" or RGBA "rgba(91, 126, 156, 0.7)". The default background color is white.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Convert.Format">
+             <summary>
+             The image format you wish to convert your image into. This can accept one of the following values:
+            
+             - jpeg
+             - png
+             - gif
+             </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Convert.PreserveExtension">
+            <summary>
+            A boolean value (true or false) instructing Kraken API whether or not the original extension should be kept in the output filename. For example when converting "image.jpg" into PNG format with this flag turned on the output image name will still be "image.jpg" even though the image has been converted into a PNG. The default value is false meaning the correct extension will always be set.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.AutoOrient">
+            <summary>
+            Flag indicating if the source image should be auto-oriented. True by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.CallbackUrl">
+            <summary>
+            The callback url that will be notified when the optimization is complete.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.ChromaSampling">
+            <summary>
+            The chroma sampling to apply during resize. 4:2:0 by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Convert">
+            <summary>
+            The kraked image's target format.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Lossy">
+            <summary>
+            Flag indicating if lossy optimization should be used. True by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.MetadataToPreserve">
+            <summary>
+            A collection indicating which metadata to preserve from the source image.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Quality">
+            <summary>
+            The quality (0-100) to apply during resize (optional).
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Resize">
+            <summary>
+            A collection of resize targets to apply during optimization.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Url">
+            <summary>
+            The source image's URL.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.Wait">
+            <summary>
+            Flag indicating if the request is synchronous or asynchronous.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeRequest.WebP">
+            <summary>
+            Flag indicating if the kraked image should be in the WebP format. False by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.KrakedId">
+            <summary>
+            The kraked image's id.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.KrakedSavings">
+            <summary>
+            The kraked image's bytes saved vs the source image.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.KrakedSize">
+            <summary>
+            The kraked image's file size.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.KrakedUrl">
+            <summary>
+            The kraked image's url.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.Resizes">
+            <summary>
+            A collection of resized kraked images.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.SourceFileName">
+            <summary>
+            The source image's file name.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.SourceHeight">
+            <summary>
+            The source image's height.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.SourceSize">
+            <summary>
+            The source image's file size.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.OptimizeResponse.SourceWidth">
+            <summary>
+            The source image's width.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.BackgroundColor">
+            <summary>
+            The background color to apply if the source image has transparency.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.ChromaSampling">
+            <summary>
+            The chroma sampling to apply during resize. 4:2:0 by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Crop">
+            <summary>
+            The resize crop mode.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Enhance">
+            <summary>
+            Flag indicating if enhancements should be applied during resize. False by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Height">
+            <summary>
+            The resize height.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Id">
+            <summary>
+            The resize id.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Lossy">
+            <summary>
+            Flag indicating if lossy optimization should be used. True by default.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Quality">
+            <summary>
+            The quality (0-100) to apply during resize (optional).
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Scale">
+            <summary>
+            The resizing scale (0-100).
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Strategy">
+            <summary>
+            The resize strategy to apply.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Width">
+            <summary>
+            The resize width.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.X">
+            <summary>
+            The resize X offset.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.Resize.Y">
+            <summary>
+            The resize Y offset.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.ResponseBase.Error">
+            <summary>
+            The error message if the response failed.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.ResponseBase.Json">
+            <summary>
+            The raw JSON of the response for debugging.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.ResponseBase.Success">
+            <summary>
+            Was the request successful or not.
+            </summary>
+        </member>
+        <member name="M:Arex388.Kraken.ResponseBase.Invalid``1(System.String)">
+            <summary>
+            An invalid response instance with an optional error message.
+            </summary>
+            <typeparam name="T">The response type.</typeparam>
+            <param name="error">The error message (optional).</param>
+            <returns>T</returns>
+        </member>
+        <member name="P:Arex388.Kraken.StatusResponse.Active">
+            <summary>
+            The account's status.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.StatusResponse.PlanName">
+            <summary>
+            The account's plan.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.StatusResponse.QuotaTotalBytes">
+            <summary>
+            The total bytes allowed for this cycle's quota.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.StatusResponse.QuotaUsedBytes">
+            <summary>
+            The total bytes used from this cycle's quota.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.StatusResponse.QuotaRemainingBytes">
+            <summary>
+            The total bytes remaining in this cycle's quota.
+            </summary>
+        </member>
+    </members>
+</doc>
