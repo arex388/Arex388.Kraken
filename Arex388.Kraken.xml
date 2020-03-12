@@ -273,6 +273,11 @@
             </summary>
             <returns>A StatusResponse.</returns>
         </member>
+        <member name="F:Arex388.Kraken.KrakenClient.InvalidFileNameResponse">
+            <summary>
+            A failure due to no file name provided.
+            </summary>
+        </member>
         <member name="F:Arex388.Kraken.KrakenClient.InvalidResizeCountResponse">
             <summary>
             A failure due to over max number of allowed resize per optimization.

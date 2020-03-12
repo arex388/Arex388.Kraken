@@ -186,6 +186,12 @@ namespace Arex388.Kraken {
                 return InvalidRequestResponse;
             }
 
+            //  Check if a file name was provided.
+
+            if (!request.FileName.HasValue()) {
+                return InvalidFileNameResponse;
+            }
+
             if (request.Resize.HasItems()) {
                 //  Check if the resize count is more than the max allowed.
 
@@ -280,6 +286,11 @@ namespace Arex388.Kraken {
         //  ========================================================================
         //  Utilities
         //  ========================================================================
+
+        /// <summary>
+        /// A failure due to no file name provided.
+        /// </summary>
+        private static readonly OptimizeResponse InvalidFileNameResponse = ResponseBase.Invalid<OptimizeResponse>("No file name was provided.");
 
         /// <summary>
         /// A failure due to over max number of allowed resize per optimization.

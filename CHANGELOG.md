@@ -1,3 +1,7 @@
+#### 2.0.2 (2020-03-12)
+
+- Added a new failure response if no file name was provided.
+
 #### 2.0.1 (2020-03-11)
 
 - Changed `Authorization` to be internal.
