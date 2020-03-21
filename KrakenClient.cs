@@ -290,22 +290,22 @@ namespace Arex388.Kraken {
         /// <summary>
         /// A failure due to no file name provided.
         /// </summary>
-        private static readonly OptimizeResponse InvalidFileNameResponse = ResponseBase.Invalid<OptimizeResponse>("No file name was provided.");
+        private static OptimizeResponse InvalidFileNameResponse => ResponseBase.Invalid<OptimizeResponse>("No file name was provided.");
 
         /// <summary>
         /// A failure due to over max number of allowed resize per optimization.
         /// </summary>
-        private static readonly OptimizeResponse InvalidResizeCountResponse = ResponseBase.Invalid<OptimizeResponse>($"You can only have {MaxResizeCount} resizes per optimization.");
+        private static OptimizeResponse InvalidResizeCountResponse => ResponseBase.Invalid<OptimizeResponse>($"You can only have {MaxResizeCount} resizes per optimization.");
 
         /// <summary>
         /// A failure due to invalid resizing dimensions.
         /// </summary>
-        private static readonly OptimizeResponse InvalidResizeDimensionsResponse = ResponseBase.Invalid<OptimizeResponse>("One or more resizes have invalid dimensions.");
+        private static OptimizeResponse InvalidResizeDimensionsResponse => ResponseBase.Invalid<OptimizeResponse>("One or more resizes have invalid dimensions.");
 
         /// <summary>
         /// A failure due to a null request.
         /// </summary>
-        private static readonly OptimizeResponse InvalidRequestResponse = ResponseBase.Invalid<OptimizeResponse>("The request is invalid.");
+        private static OptimizeResponse InvalidRequestResponse => ResponseBase.Invalid<OptimizeResponse>("The request is invalid.");
 
         /// <summary>
         /// Validate if the resize dimensions are correct.

@@ -273,22 +273,22 @@
             </summary>
             <returns>A StatusResponse.</returns>
         </member>
-        <member name="F:Arex388.Kraken.KrakenClient.InvalidFileNameResponse">
+        <member name="P:Arex388.Kraken.KrakenClient.InvalidFileNameResponse">
             <summary>
             A failure due to no file name provided.
             </summary>
         </member>
-        <member name="F:Arex388.Kraken.KrakenClient.InvalidResizeCountResponse">
+        <member name="P:Arex388.Kraken.KrakenClient.InvalidResizeCountResponse">
             <summary>
             A failure due to over max number of allowed resize per optimization.
             </summary>
         </member>
-        <member name="F:Arex388.Kraken.KrakenClient.InvalidResizeDimensionsResponse">
+        <member name="P:Arex388.Kraken.KrakenClient.InvalidResizeDimensionsResponse">
             <summary>
             A failure due to invalid resizing dimensions.
             </summary>
         </member>
-        <member name="F:Arex388.Kraken.KrakenClient.InvalidRequestResponse">
+        <member name="P:Arex388.Kraken.KrakenClient.InvalidRequestResponse">
             <summary>
             A failure due to a null request.
             </summary>

@@ -1,3 +1,8 @@
+#### 2.0.3 (2020-03-21)
+
+- Targeting .NET Standard 2.0 now.
+- Changed all `const string` properties to `static readonly string`.
+
 #### 2.0.2 (2020-03-12)
 
 - Added a new failure response if no file name was provided.

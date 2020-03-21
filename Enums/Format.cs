@@ -1,7 +1,7 @@
 ﻿namespace Arex388.Kraken {
 	public static class Format {
-		public const string Gif = "gif";
-		public const string Jpeg = "jpeg";
-		public const string Png = "png";
+		public static readonly string Gif = "gif";
+		public static readonly string Jpeg = "jpeg";
+		public static readonly string Png = "png";
 	}
 }
