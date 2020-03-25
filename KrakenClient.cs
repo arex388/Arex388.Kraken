@@ -25,14 +25,14 @@ namespace Arex388.Kraken {
         private Authorization Authorization { get; }
 
         /// <summary>
-        /// An instance of HttpClient.
-        /// </summary>
-        private HttpClient HttpClient { get; }
-
-        /// <summary>
         /// Is debugging enabled.
         /// </summary>
         private bool Debug { get; }
+
+        /// <summary>
+        /// An instance of HttpClient.
+        /// </summary>
+        private HttpClient HttpClient { get; }
 
         /// <summary>
         /// Kraken.io API client.
@@ -58,8 +58,8 @@ namespace Arex388.Kraken {
                 Access = accessKey,
                 Secret = secretKey
             };
-            HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             Debug = debug;
+            HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Arex388.Kraken {
         }
 
         //  ========================================================================
-        //  
+        //  Response
         //  ========================================================================
 
         private static ByteArrayContent GetByteContent(
