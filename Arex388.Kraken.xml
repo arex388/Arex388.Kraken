@@ -197,14 +197,14 @@
             An instance of Authorization containing the access and secret keys for the Kraken.io API.
             </summary>
         </member>
-        <member name="P:Arex388.Kraken.KrakenClient.HttpClient">
-            <summary>
-            An instance of HttpClient.
-            </summary>
-        </member>
         <member name="P:Arex388.Kraken.KrakenClient.Debug">
             <summary>
             Is debugging enabled.
+            </summary>
+        </member>
+        <member name="P:Arex388.Kraken.KrakenClient.HttpClient">
+            <summary>
+            An instance of HttpClient.
             </summary>
         </member>
         <member name="M:Arex388.Kraken.KrakenClient.#ctor(System.Net.Http.HttpClient,System.String,System.String,System.Boolean)">

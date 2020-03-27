@@ -1,3 +1,7 @@
+#### 2.0.4 (2020-03-27)
+
+- Added a timed out response for when a `TaskCancelledException` is thrown when the HttpClient times out.
+
 #### 2.0.3 (2020-03-21)
 
 - Targeting .NET Standard 2.0 now.

@@ -243,6 +243,8 @@ namespace Arex388.Kraken {
         //  Response
         //  ========================================================================
 
+        private const string TimedOutResponse = "{{\"message\":\"The connection has timed out\",\"success\":false}}";
+
         private static ByteArrayContent GetByteContent(
             OptimizeRequest request) => request is null ? null : new ByteArrayContent(request.FileBlob);
 
@@ -256,6 +258,8 @@ namespace Arex388.Kraken {
                 var message = $"{e.Message}\n{e.InnerException?.Message}".Trim();
 
                 return $"{{\"message\":\"{message}\",\"success\":false}}";
+            } catch (TaskCanceledException) {
+                return TimedOutResponse;
             }
         }
 
