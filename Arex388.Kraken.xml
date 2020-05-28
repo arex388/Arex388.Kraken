@@ -192,17 +192,17 @@
             The maximum number of resizes allowed for an optimization.
             </summary>
         </member>
-        <member name="P:Arex388.Kraken.KrakenClient.Authorization">
+        <member name="F:Arex388.Kraken.KrakenClient._authorization">
             <summary>
             An instance of Authorization containing the access and secret keys for the Kraken.io API.
             </summary>
         </member>
-        <member name="P:Arex388.Kraken.KrakenClient.Debug">
+        <member name="F:Arex388.Kraken.KrakenClient._debug">
             <summary>
             Is debugging enabled.
             </summary>
         </member>
-        <member name="P:Arex388.Kraken.KrakenClient.HttpClient">
+        <member name="F:Arex388.Kraken.KrakenClient._httpClient">
             <summary>
             An instance of HttpClient.
             </summary>
@@ -288,7 +288,7 @@
             A failure due to invalid resizing dimensions.
             </summary>
         </member>
-        <member name="P:Arex388.Kraken.KrakenClient.InvalidRequestResponse">
+        <member name="P:Arex388.Kraken.KrakenClient.NullRequestResponse">
             <summary>
             A failure due to a null request.
             </summary>

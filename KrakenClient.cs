@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Arex388.Kraken {
     public sealed class KrakenClient {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings {
+        private static JsonSerializerSettings JsonSerializerSettings => new JsonSerializerSettings {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             NullValueHandling = NullValueHandling.Ignore
         };
@@ -22,17 +22,17 @@ namespace Arex388.Kraken {
         /// <summary>
         /// An instance of Authorization containing the access and secret keys for the Kraken.io API.
         /// </summary>
-        private Authorization Authorization { get; }
+        private readonly Authorization _authorization;
 
         /// <summary>
         /// Is debugging enabled.
         /// </summary>
-        private bool Debug { get; }
+        private readonly bool _debug;
 
         /// <summary>
         /// An instance of HttpClient.
         /// </summary>
-        private HttpClient HttpClient { get; }
+        private readonly HttpClient _httpClient;
 
         /// <summary>
         /// Kraken.io API client.
@@ -54,12 +54,12 @@ namespace Arex388.Kraken {
                 throw new ArgumentNullException(nameof(secretKey));
             }
 
-            Authorization = new Authorization {
+            _authorization = new Authorization {
                 Access = accessKey,
                 Secret = secretKey
             };
-            Debug = debug;
-            HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _debug = debug;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace Arex388.Kraken {
         public async Task<byte[]> DownloadAsync(
             string url) {
             if (url is null) {
-                return null;
+                return Array.Empty<byte>();
             }
 
             try {
-                return await HttpClient.GetByteArrayAsync(url);
+                return await _httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
             } catch (HttpRequestException) {
                 return null;
             }
@@ -116,7 +116,7 @@ namespace Arex388.Kraken {
             //  Check if the request is null and return an invalid response if it is.
 
             if (request is null) {
-                return InvalidRequestResponse;
+                return NullRequestResponse;
             }
 
             if (request.Resize.HasItems()) {
@@ -137,10 +137,10 @@ namespace Arex388.Kraken {
 
             //  Get the request's response and deserialize it into an OptimizeResponse instance.
 
-            var response = await GetResponseAsync(request);
+            var response = await GetResponseAsync(request).ConfigureAwait(false);
             var optimizeResponse = JsonConvert.DeserializeObject<OptimizeResponse>(response);
 
-            if (Debug) {
+            if (_debug) {
                 optimizeResponse.Json = response;
             }
 
@@ -183,7 +183,7 @@ namespace Arex388.Kraken {
             //  Check if the request is null and return an invalid response if it is.
 
             if (request is null) {
-                return InvalidRequestResponse;
+                return NullRequestResponse;
             }
 
             //  Check if a file name was provided.
@@ -214,10 +214,10 @@ namespace Arex388.Kraken {
 
             //  Get the request's response and deserialize it into an OptimizeResponse instance.
 
-            var response = await GetResponseAsync(request);
+            var response = await GetResponseAsync(request).ConfigureAwait(false);
             var optimizeWaitResponse = JsonConvert.DeserializeObject<OptimizeResponse>(response);
 
-            if (Debug) {
+            if (_debug) {
                 optimizeWaitResponse.Json = response;
             }
 
@@ -229,10 +229,10 @@ namespace Arex388.Kraken {
         /// </summary>
         /// <returns>A StatusResponse.</returns>
         public async Task<StatusResponse> StatusAsync() {
-            var response = await GetResponseAsync(new StatusRequest());
+            var response = await GetResponseAsync(new StatusRequest()).ConfigureAwait(false);
             var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(response);
 
-            if (Debug) {
+            if (_debug) {
                 statusResponse.Json = response;
             }
 
@@ -243,23 +243,21 @@ namespace Arex388.Kraken {
         //  Response
         //  ========================================================================
 
-        private const string TimedOutResponse = "{{\"message\":\"The connection has timed out\",\"success\":false}}";
-
         private static ByteArrayContent GetByteContent(
             OptimizeRequest request) => request is null ? null : new ByteArrayContent(request.FileBlob);
 
         private async Task<string> GetResponseAsync(
             RequestBase request) {
-            request.Authorization = Authorization;
+            request.Authorization = _authorization;
 
             try {
-                return await GetPostResponseAsync(request);
+                return await GetPostResponseAsync(request).ConfigureAwait(false);
             } catch (HttpRequestException e) {
                 var message = $"{e.Message}\n{e.InnerException?.Message}".Trim();
 
                 return $"{{\"message\":\"{message}\",\"success\":false}}";
             } catch (TaskCanceledException) {
-                return TimedOutResponse;
+                return "{{\"message\":\"The request has timed out\",\"success\":false}}";
             }
         }
 
@@ -280,9 +278,9 @@ namespace Arex388.Kraken {
                 content.Add(byteContent, "file", optimizeRequest.FileName);
             }
 
-            using var message = await HttpClient.PostAsync(request.Endpoint, content);
+            using var message = await _httpClient.PostAsync(request.Endpoint, content).ConfigureAwait(false);
 
-            var messageContent = await message.Content.ReadAsStringAsync();
+            var messageContent = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return messageContent;
         }
@@ -309,7 +307,7 @@ namespace Arex388.Kraken {
         /// <summary>
         /// A failure due to a null request.
         /// </summary>
-        private static OptimizeResponse InvalidRequestResponse => ResponseBase.Invalid<OptimizeResponse>("The request is invalid.");
+        private static OptimizeResponse NullRequestResponse => ResponseBase.Invalid<OptimizeResponse>();
 
         /// <summary>
         /// Validate if the resize dimensions are correct.
