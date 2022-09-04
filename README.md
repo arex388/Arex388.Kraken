@@ -6,9 +6,17 @@ To use, create a new instance of `KrakenClient` and pass in an instance of `Http
 
 Available as a NuGet package [here](https://www.nuget.org/packages/Arex388.Kraken).
 
----
 
-## IMPORTANT
+
+#### No Longer using Kraken.io
+
+As of about May of 2022 I've stopped using Kraken.io for image optimizations. I stopped using them because of a billing issue where the card on file had expired, but the past due balance couldn't manually be paid, and support was unresponsive. Eventually the auto-payment for the month actually processed the past due balance, and after about a month support replied.
+
+It was too late by then as I couldn't wait days or weeks for it to be resolved and I ended up rolling my own image optimizer and I'm much happier now. It basically does the same optimizations, and I think maybe even does a slightly better job, but is also free, relatively speaking.
+
+So, going forward, I'm really not going to be maintaining this library beyond dependency updates so that GitHub's Dependabot leaves me alone about vulnerabilities in referenced packages.
+
+
 
 #### v2.0.3
 
@@ -18,11 +26,15 @@ Upgrading to .NET Standard 2.0 resolved the issues I was having with that projec
 
 > *Library authors who need to support .NET Framework customers should stay on .NET Standard 2.0.*
 
+
+
 #### v2.0.0
 
 Version 2.0.0 is a breaking change! Mostly just renamed methods and "enum" classes. Look at the change log for more details.
 
----
+
+
+#### Usage
 
 Create an instance of the `KrakenClient`.
 

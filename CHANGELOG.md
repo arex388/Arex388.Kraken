@@ -1,3 +1,7 @@
+#### 2.0.6 (2022-09-04)
+
+- Minor update to resolve a vulnerability in Newtonsoft.Json.
+
 #### 2.0.5 (2020-05-07)
 
 - Internal cleanup and hopefully performance optimizations by adding `ConfigureAwait(false)` to all `await`calls.
